@@ -1,0 +1,41 @@
+@import './Sidebar';
+@import './Random';
+@import './Best';
+@import './Custom';
+// @import 
+
+@import url('https://fonts.googleapis.com/css?family=Bebas+Neue|Solway|Raleway|Montserrat&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a:link,
+a:active,
+a:visited,
+a:focus {
+    text-decoration: none;
+}
+
+select, 
+input, 
+button {
+    outline: none;
+    border: none;
+}
+
+.body {
+    
+    
+}
+
+.main-container {
+    position: relative;
+    min-height: 100vh;
+    margin-left: 27%;
+    padding: 4rem;
+    background-color: rgb(46, 21, 0);
+}

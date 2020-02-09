@@ -1,0 +1,11 @@
+export const RANDOM_MOVIE = 'RANDOM_MOVIE';
+export const FETCH_GENRES = 'FETCH_GENRES';
+export const BEST_MOVIES = 'BEST_MOVIES';
+export const FETCH_MOVIES_BY_GENRE = 'FETCH_MOVIES_BY_GENRE';
+export const FETCH_LANGUAGES = 'FETCH_LANGUAGES';
+export const FETCH_BY_CRITERIA = 'FETCH_BY_CRITERIA';
+
+
+
+
+

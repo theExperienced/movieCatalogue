@@ -1,0 +1,85 @@
+.random {
+
+    &__container {
+        display: grid;
+        grid-row-gap: 3rem;
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: auto 1fr;
+    }
+
+    &__heading {
+        text-transform: capitalize;
+        align-self: center;
+        color: rgb(196, 158, 102);
+        padding-left: 5rem;
+        font-size: 4rem;
+        font-family: 'Bebas Neue', cursive;
+    }
+
+    &__generate-button {
+        justify-self: end;
+        border: 2px solid rgb(255, 213, 136);
+        background-color: rgb(92, 84, 84);
+        font-size: 1.2rem;
+        align-self: center;
+        border-radius: 100px;
+        color: rgba(124, 87, 76, 0.842);
+        text-transform: capitalize;
+        padding: .8rem 2rem;
+        transition: all .15s linear;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(255, 193, 79, 0.521);
+            color: rgba(0, 0, 0, .8);
+        }
+    }
+
+    &__item {
+        display: flex;
+        grid-column: 1 / span 2;
+        padding: 2.5rem;
+        background-color: rgba(255, 255, 255, .7);
+        border: 1px solid rgba(0, 0, 0, .35);
+        border-radius: 10px;
+        // box-shadow: 0 3px 6px 1px rgba(255, 255, 255, .6);
+        // background:red;
+    }
+
+    &__info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        // background-color: rgba(255, 255, 255, 0.61);
+        margin-right: 2rem;
+        font-family: 'Raleway', sans-serif;
+        color: rgba(0, 0, 0, .8);
+
+        & > h2 {
+            font-size: 2rem;
+            color: rgba(155, 63, 63, 0.925);
+        }
+
+        & > p {
+            padding: 1.5rem 0;
+        }
+
+        & > *:not(h2):not(:last-child) {
+            border-bottom: 1px solid rgba(0, 0, 0, .3);
+        }
+    }
+
+    &__img-container {
+        // flex: 1;
+        align-self: flex-start;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 3px solid black;
+        box-shadow: 0 3px 20px 2px rgba(0, 0, 0, .3)
+    }
+
+    &__img {
+        display: block;
+    }
+}
