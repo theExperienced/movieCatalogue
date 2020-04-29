@@ -1,7 +1,10 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchBestMovies } from "../actions";
-import MovieItem from './MovieItem'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { fetchBestMovies } from '../redux/movies/movies.actions';
+
+import MovieItem from '../components/MovieItem/MovieItem.component';
+import { StyledPage } from '../GlobalStyle';
 
 export class BestMovies extends Component {
   renderBestMoviesList() {
@@ -15,7 +18,9 @@ export class BestMovies extends Component {
   }
 
   render() {
-    return <div>{this.props.bestMovies && this.renderBestMoviesList()}</div>;
+    return <StyledPage>
+      {this.props.bestMovies && this.renderBestMoviesList()}
+    </StyledPage>;
   }
 }
 

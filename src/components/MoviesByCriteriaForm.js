@@ -1,81 +1,79 @@
 import React, { Component } from 'react';
 import { Field, Form, reduxForm } from 'redux-form';
-import Dropdown from './Dropdown';
 import { connect } from 'react-redux';
-import { fetchMoviesByCriteria } from '../actions';
 
+import { fetchMoviesByCriteria } from '../redux/movies/movies.actions';
 
-class MoviesByCriteriaForm extends Component {
+import Dropdown from './Dropdown';
 
-    renderSelect = formProps => {           //not sure formpropess is needed
-        console.log('RENDERING SELECT OF CRITERIA', formProps)
+const MoviesByCriteriaForm = ({ handleSubmit, className, genres, languages, reset, pristine, submitting }) => {
+    const renderSelect = ({ options, purpose, ...formProps }) => {           //not sure formpropess is needed
+        console.log('RENDERING SELECT OF CRITERIA', options)
         return (
-            <Dropdown options={this.props.genres} purpose='Genres' onChange={value => formProps.input.onChange(value)}/>
+            <Dropdown options={options} purpose={purpose} onChange={value => formProps.input.onChange(value)}/>
         );
     }
 
-    onSelectGenre = value => {
-
-
-    }
-
-    renderInput = formProps => {
-        const {input, label, type, meta} = formProps;
+    const renderInput = ({ input, label, type, meta: { active, error, touched } }) => {
         const className = '' 
         return (
             <div className={className}>
                 <label>{label}</label>
                 <input {...input} autoComplete='off' type={type}/>
-                <div>{this.renderError(meta)}</div>
+                <div>{active && renderError({ meta: {error, touched}})}</div>
             </div>
         );
     }
 
-    renderError = ({error, touched}) => {
+    const renderError = ({ error, touched }) => {
         if (touched && error) {
             return (
-                <div className="ui error message">
-                    <div className="header">{error}</div>
+                <div className='ui error message'>
+                    <div className='header'>{error}</div>
                 </div>
             );
         }
     }
 
 
-    onSubmit = (formValues) => {
-        this.props.onSubmit(formValues);
-    };
+    // const onSubmit = (formValues) => {
+    //     onSubmit(formValues);
+    // };
 
-    render() {
-        return (
-           
-                <Form className={`${this.props.className}__form`} onSubmit={this.props.handleSubmit(this.onSubmit)}>
-                   <Field name="with_genres" component={this.renderSelect}/> 
-                   <Field name="language" type="text" component={this.renderInput} label="Enter Language"/> 
-                   <Field name="year" type="number" component={this.renderInput} label="Enter Year"/> 
-                   <Field name="vote_average" type="number" step="0.01" component={this.renderInput} label="Minimum Ratings"/>        {/*maybe step is not nessecary */}
-                   <Field name="with_keywords" type="text" component={this.renderInput} label="With Keywords"/> 
-                   <button>Go</button>
-                </Form>
-        )
-    }
+    return (
+        <Form className={`${className}__form`} onSubmit={handleSubmit}>
+            <Field name='genre' component={renderSelect} options={genres} purpose='genres' /> 
+            <Field name='language' component={renderSelect} options={languages} purpose='languages' /> 
+            <Field name='year' type='number' component={renderInput} label='Enter Year'/> 
+            <Field name='voteAverage' type='number' step='0.01' component={renderInput} label='Minimum Ratings'/>        {/*maybe step is not nessecary */}
+            <Field name='withKeywords' type='text' component={renderInput} label='With Keywords'/> 
+            <button type='submit' disabled={pristine || submitting}  onClick={reset}>Go</button>       {/*onClick={reset}*/}
+        </Form>
+    );
 }
 
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ genres, languages }) => {
+    console.log('languagessssssssss932748275892759827359827395', languages, genres)
     return {
-        genres: state.genres.genres
+        genres: genres.genresList,
+        languages: languages.languageList
     }
 }
 
-const validate = formValues => {
+const validate = ({ ...values }) => {
+    // console.log('values from form validate',values)
     const errors = {};
+
+    if (String(values.year).length !== 4 || values.year > new Date().getFullYear()) {
+        errors.year = 'big year';
+    }
+
+    
     return errors;
 }
 
-const WrappedMoviesByCriteriaForm = connect(mapStateToProps, {
-    fetchMoviesByCriteria
-})(MoviesByCriteriaForm);
+const WrappedMoviesByCriteriaForm = connect(mapStateToProps, { fetchMoviesByCriteria })(MoviesByCriteriaForm);
 
 export default reduxForm({
     form: 'MovieByCriteriaForm',

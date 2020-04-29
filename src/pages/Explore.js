@@ -1,8 +1,11 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchMoviesByGenre, fetchGenreList } from "../actions";
-import MovieItem from "./MovieItem";
-import Dropdown from "./Dropdown";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { fetchMoviesByGenre  } from '../redux/movies/movies.actions';
+import { fetchGenres } from '../redux/genres/genres.actions';
+
+import MovieItem from '../components/MovieItem/MovieItem.component';
+import Dropdown from '../components/Dropdown';
 
 class Explore extends Component {
   state = { 
@@ -14,10 +17,10 @@ class Explore extends Component {
   renderMovieList = () => {
       console.log('rendering genre list')
       if (this.props.movies.movies.length) {
-    return this.props.movies.movies.map(movie => (
-      <MovieItem movie={movie} />
-    
-    ));
+          return this.props.movies.movies.map(movie => (
+            <MovieItem movie={movie} />
+          
+          ));
       }
   };
 
@@ -54,13 +57,17 @@ class Explore extends Component {
 
   componentDidMount() {
     // const genreId = this.props.match.params.genre;
-    
-    this.props.fetchMoviesByGenre(this.state.genreId, false, this.state.page);
+    const { fetchMoviesByGenre, movies } = this.props;
+    const { genreId, page } = this.state;
+    if (!movies || movies.length === 0) {
+      fetchMoviesByGenre(genreId, false, page);
+    }
 
-    window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll);
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { genreId, page } = this.state;
     // const genreId = this.props.match.params.genre;
     console.log('SELECTED VALUE FROM EXPLORE UPDATE', this.state.genreId)
     if (this.state.genreId === prevState.genreId && this.state.page !== prevState.page) {
@@ -69,7 +76,7 @@ class Explore extends Component {
         this.props.fetchMoviesByGenre(this.state.genreId, true, this.state.page);
     }
 
-    window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll);
   }
 
   render() {
@@ -79,7 +86,7 @@ class Explore extends Component {
       {this.props.genres && <Dropdown options={this.props.genres} purpose='Genres' onChange={this.onSelectGenre}/>}
       {console.log('about to render by genre list', this.props)}
         {this.props.movies && this.renderMovieList()}
-        {this.state.isFetching && "Loading..."}
+        {this.state.isFetching && 'Loading...'}
       </div>
     );
   }
@@ -92,4 +99,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { fetchMoviesByGenre, fetchGenreList })(Explore);
+export default connect(mapStateToProps, { fetchMoviesByGenre, fetchGenres })(Explore);

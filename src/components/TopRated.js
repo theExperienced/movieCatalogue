@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchTopMovies } from '../actions';
 
-
+import { fetchTopMovies } from '../redux/movies/movies.actions';
 
 export class TopRated extends Component {
     componentDidMount() {

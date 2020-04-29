@@ -3,14 +3,15 @@ import React, { Component } from "react";
 class DropDown extends Component {
 
   renderOptions() {
-    return Object.entries(this.props.options).map(option => {
+    console.log('OPTIONS',this.props.options)
+    return this.props.options.map(option => {
       return (
 
         // <div className="item" data-value={option[1]}>{option[0]}</div>
 
 
         // <div className="item" data-value={option[1]}>{option[0]}</div>
-<option value={option[1]}>{option[0]}</option> 
+        <option value={option.value}>{option.title}</option> 
 
 //         // <div className="item">
 //         //   {option}

@@ -1,21 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware, compose } from "redux";
-import reduxThunk from "redux-thunk";
+import { store } from "./redux/store";
 
-import App from "./components/App";
-import reducers from "./reducers";
+import App from "./App";
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(
-  reducers, 
-  composeEnhancers(applyMiddleware(reduxThunk))
-);
+import { GlobalStyle } from "./GlobalStyle";
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+    <Provider store={store}>
+      <GlobalStyle />
+      <App />
+    </Provider>,
   document.querySelector("#root")
 );
