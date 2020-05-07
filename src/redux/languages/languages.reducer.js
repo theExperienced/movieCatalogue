@@ -5,7 +5,7 @@ export const languageReducer = (state = {}, action) => {
       case LanguageActionTypes.FETCH_LANGUAGES:
         console.log("GENRES FROM REDUCER ", action.payload);
         // return { ...state, languages: action.payload };
-        return { languageList: [ ...action.payload ] };
+        return { languageList: action.payload };
   
       default:
         return state;

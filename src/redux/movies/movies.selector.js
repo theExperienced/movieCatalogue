@@ -9,7 +9,7 @@ export const selectRandomMovie = createSelector(
 
 export const selectBestMovies = createSelector(
     [selectMovies],
-    movies => movies.bestMovies
+    movies => {console.log('SELECTING BET MOVIES', movies.bestMovies); return movies.bestMovies}
 );
 
 export const selectMoviesByCriteria = createSelector(
@@ -17,10 +17,17 @@ export const selectMoviesByCriteria = createSelector(
     movies => movies.moviesByCriteria
 );
 
-export const selectMoviesByGenre = createSelector(
+export const selectAllMoviesByGenre = createSelector(
     [selectMovies],
     movies => movies.moviesByGenre
 );
+
+export const selectMoviesByGenre = genreId => {
+    return createSelector(
+        [selectAllMoviesByGenre],
+        moviesByGenre => moviesByGenre[genreId]
+    );
+}
 
 
 

@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components';
 
-import { Link } from 'react-router-dom';
-
-export const StyledMovieItem = styled.div`
-    
+export const StyledListComplex = styled.div`
+    ${'' /* overflow-x: hidden; */}
 `;

@@ -2,38 +2,49 @@ import api from "../../api/api";
 
 import MovieActionTypes from "./movies.types";
 
-export const fetchMoviesByCriteria = (formValues, isNewQuery) => async dispatch => {
+export const fetchMoviesByCriteria = (formValues, page, isNewQuery) => async dispatch => {    //maybe just page instead of isNewQury
+  // console.log('PAYLOAD INSIDE MOVIE BY CRITEIRA REDUCER', result)
     let endPoint = "discover/movie?api_key=55881c34587ea582a685d26399d1be47";
     const endPointAppendix = Object.entries(formValues).map(query => {
         
         return  query[0] === 'vote_average' ? `${query[0]}.gte=${query[1]}` : `${query[0]}=${query[1]}`}).join('&');     //there got to be a better way
 
     endPoint = endPointAppendix ? `${endPoint}&${endPointAppendix}` : endPoint;
-    let result;
+    let data;
     await api.get(endPoint).
-    then(response => { result = response.data}).
+    then(response => { data = response.data}).
     catch(error => console.log('ERROR FROM FETCH BY CRITERIA REDUCER', error));
     
-    console.log('PAYLOAD INSIDE MOVIE BY CRITEIRA REDUCER', result)
 
     dispatch({
         type: MovieActionTypes.FETCH_BY_CRITERIA,
         payload: {
-            movies: result.results,
-            total_pages: result.total_pages, 
-            isNewQuery: isNewQuery
+            movies: data.datas,
+            totalPages: data.total_pages, 
+            isNewQuery: isNewQuery, 
+            page: data.page
         }
     });
 };
 
-export const fetchMoviesByGenre = (genreId, isGenreChanged, page) => async dispatch => {
-  const response = await api.get(
+export const fetchMoviesByGenre = (genreId, page) => async dispatch => {
+  let data;
+  await api.get(
     `discover/movie?api_key=55881c34587ea582a685d26399d1be47&page=${page}&with_genres=${genreId}`
-  );
+  ).then(response => data = response.data )
+  // movies = data.results.map(movie => ({ movie: { backdrop_path, genre_ids, original_language, original_title, overview, poster_path, release_date, title, vote_average }}));
   
+
+  // const { results: movies, total_pages: totalPages, page } = data;
+
   dispatch({
     type: MovieActionTypes.FETCH_MOVIES_BY_GENRE,
-    payload: [response.data, isGenreChanged]
+    payload: { 
+        id: genreId,
+        movies: data.results,    //probably dont need to destructure 'page' 
+        totalPages: data.total_pages,
+        page: data.page
+    }
   });
 };
 
@@ -54,13 +65,21 @@ export const fetchRandomMovie = () => async dispatch => {
   });
 };
 
-export const fetchBestMovies = () => async dispatch => {
-  const bestMovies = await api.get(
-    "movie/top_rated?api_key=55881c34587ea582a685d26399d1be47&page=1"
-  );
+export const fetchBestMovies = (page = 1) => async dispatch => {
+  let data;
+  await api.get(
+    `movie/top_rated?api_key=55881c34587ea582a685d26399d1be47&page=${page}&language=en-US`
+  ).then(response => data = response.data)
+  .catch(error => alert(error));
+
+  console.log('BEST MOVIESSSS',data)
   
   dispatch({
     type: MovieActionTypes.FETCH_BEST_MOVIES,
-    payload: bestMovies.data.results
+    payload: {
+      page: data.page,
+      movies: data.results,
+      totalPages: data.total_pages
+    }
   });
 };

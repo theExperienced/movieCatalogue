@@ -10,7 +10,16 @@ const middlewares = [reduxThunk];
 export const store = createStore(
     rootReducer,
     {
-        themes: { currentTheme: 'dark' }
+        movies: {
+            moviesByGenre: {}
+        },
+        themes: { 
+            currentTheme: 'dark' 
+        },
+        modal: {
+            isActive: false,
+            movie: null
+        }
     },
     composeEnhancers(applyMiddleware(...middlewares))
 );

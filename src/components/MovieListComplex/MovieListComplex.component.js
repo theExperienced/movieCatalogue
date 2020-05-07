@@ -1,56 +1,96 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component, useState, useEffect, useRef, useCallback } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
-const MovieItem = ({ movie: {
-                   title,
-                   overview,
-                   vote_average: ratings,
-                   release_date: releaseDate,
-                   poster_path: poster,
-                   original_language: languageAbbreviated
-                   },
-                   className,
-                   languages }) => {
+import { selectGenreList } from '../../redux/genres/genres.selector';
+import { fetchMoviesByGenre } from '../../redux/movies/movies.actions';
+import { selectAllMoviesByGenre } from '../../redux/movies/movies.selector';
+
+import { GenreMovieList } from '../MovieList/MovieList.component';
+import PendingIndicator from '../PendingIndicator/PendingIndicator.component';
+import InfiniteScroll from 'react-infinite-scroll-component';
+
+import { StyledListComplex } from './MovieListComplex.style';
+import { StyledListContainer, StyledTitle } from '../MovieList/MovieList.style';
+
+const MovieListComplex = props => {
+  // const [ genreNum, setGenreNum ] = useState(5);
+
+  const { moviesGalore, genres } = props;
+  const genresLength = Object.keys(genres).length;
+  console.log('PROPS FROM INSIDE MOVIE LIST COMPOLEX RENDER', genresLength)
   
-    //maybe backdroppath instead of poster path
-    // let {
-    //   movie: {
-    //     title,
-    //     overview,
-    //     vote_average: ratings,
-    //     release_date: releaseDate,
-    //     poster_path: poster,
-    //     original_language: languageAbbreviated
-    //   },
-    //   className,
-    //   languages
-    // } = this.props;
 
-  const languageUnabrreviated = languages.filter(
-    language => language.value === languageAbbreviated
-  )[0].title;
+
+
+  const [ genresNum, setGenresNum ] = useState(Math.max(5, Object.keys(moviesGalore).length));
+  const [ hasMore, setHasMore ] = useState(true);
+
+  const addThreeMoreGenres = () => {
+
+
+    setGenresNum(prevNum => prevNum + 3);
+    console.log('ADDING THREE MORE GENRES')
+  }
+
+  useEffect(() => {
+    console.log('USEEFFECT COMPLEX LIST', hasMore)
+
+    if (genres.length <= genresNum - 1) {
+      setGenresNum(genres.length);                  //MIGHT BELONG IN USEEFFECT
+      setHasMore(false);
+    }
+
+    return () => console.log('BYEEEEEEEEEEEEEEEEEE')
+  }, [genresNum])
+
+  console.log('BEFORE RENDER COMPLEX LIST', hasMore)
+
+
+  const observer = useRef();
+  const lastListRef = useCallback(list => {
+    // if (loading) return
+    if (observer.current) 
+      observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setGenresNum(prevNum => prevNum + 3);
+      }
+    });
+    if (list) observer.current.observe(list)
+  }, [hasMore])                  //add loading to dependencies!!!
+
 
   return (
-    <div className={`${className}__item`}>
-      <div className={`${className}__info`}>
-        <h2>{title}</h2>
-        <p>{overview}</p>
-        <p>Ratings: {ratings}</p>
-        <p>Release Date: {releaseDate}</p>
-        <p>Language: {languageUnabrreviated}</p>
-      </div>
-      <div className={`${className}__img-container`}>
-        <img src={`https://image.tmdb.org/t/p/w200/${poster}`} className={`${className}__img`}/>
-      </div>
-    </div>
+    <StyledListComplex id={'listComplex'}>
+      {/* <InfiniteScroll 
+        dataLength={genresLength}
+        hasMore={hasMore}
+        next={addThreeMoreGenres}
+        // scrollableTarget={'listComplex'}
+        height={400}
+        // loader={<h4>Loading...</h4>}
+        onScroll={() => console.log('INFINITLEY SCROLLED')}
+      > */}
+      { 
+        Object.entries(genres).slice(0, genresNum).map(([value, title], index) => {
+            return (
+              <div ref={index + 1 === genresNum ? lastListRef : null}>
+                <StyledTitle>{title}</StyledTitle> 
+                <GenreMovieList isGenreList genreId={value} fetcher={fetchMoviesByGenre}/> {/*moviesGalore={moviesGalore[value].movies} listData={listData}*/}   
+              </div>
+            )
+          })
+      }
+      {/* </InfiniteScroll>  */}
+    </StyledListComplex>
   );
 }
 
+const mapStateToProps = createStructuredSelector({
+  genres: selectGenreList,
+  moviesGalore: selectAllMoviesByGenre             ///////////////////////TRIALLLLL
+});
 
-const mapStateToProps = state => {
-  return {
-    languages: state.languages.languageList
-  };
-};
-
-export default connect(mapStateToProps)(MovieItem);
+export default connect(mapStateToProps)(MovieListComplex);

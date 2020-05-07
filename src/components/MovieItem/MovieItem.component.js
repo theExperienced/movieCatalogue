@@ -1,16 +1,24 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
-const MovieItem = ({ movie: {
-                   title,
-                   overview,
-                   vote_average: ratings,
-                   release_date: releaseDate,
-                   poster_path: poster,
-                   original_language: languageAbbreviated
-                   },
-                   className,
-                   languages }) => {
+import { openModal } from '../../redux/modal/modal.actions';
+
+import { StyledItem } from './MovieItem.style';
+import { selectLanguageList } from '../../redux/languages/languages.selector';
+
+const MovieItem = ({ isListItem, movie, className, languages, openModal }) => {
+
+    const {
+        title,
+        overview,
+        vote_average: ratings,
+        release_date: releaseDate,
+        poster_path: poster,
+        backdrop_path: backdrop,
+        profile_path: profile,
+        original_language: languageId
+    } = movie;
   
     //maybe backdroppath instead of poster path
     // let {
@@ -20,37 +28,68 @@ const MovieItem = ({ movie: {
     //     vote_average: ratings,
     //     release_date: releaseDate,
     //     poster_path: poster,
-    //     original_language: languageAbbreviated
+    //     original_language: languageId
     //   },
     //   className,
     //   languages
     // } = this.props;
+    
+    console.log('PROPS FROM INSDIDE MOVIE ITEM', isListItem)
 
-  const languageUnabrreviated = languages.filter(
-    language => language.value === languageAbbreviated
-  )[0].title;
+  // const languageUnabrreviated = languages.filter(
+  //   language => language.value === languageId
+  // )[0].title;
+
+ 
+
+  const onClick = () => {
+    if (isListItem)  {                          //maybe theres a better way to do this without conditional
+      console.log('CLICKED ON MOVIE ITEM')
+      openModal(movie);
+    }
+  } 
 
   return (
-    <div className={`${className}__item`}>
+    <StyledItem className={`${className}__item`} onClick={onClick} isListItem>
+    
+      {
+        isListItem                        ?
+                     
+    <>
+        <img src={`https://image.tmdb.org/t/p/w500/${poster}`} className={`${className}__img`}/> {/*maybe just set the backgonr as img instead of img el*/}
+        <div>
+          <h3>{title}</h3>
+          {/* <p>{releaseDate}</p> */}
+        </div>
+    </>
+                                         :
+
+      <>
       <div className={`${className}__info`}>
         <h2>{title}</h2>
         <p>{overview}</p>
         <p>Ratings: {ratings}</p>
         <p>Release Date: {releaseDate}</p>
-        <p>Language: {languageUnabrreviated}</p>
+        <p>Language: {languages[languageId]}</p>
       </div>
       <div className={`${className}__img-container`}>
         <img src={`https://image.tmdb.org/t/p/w200/${poster}`} className={`${className}__img`}/>
-      </div>
-    </div>
+      </div> 
+      </> 
+
+
+      }
+    </StyledItem>
   );
 }
 
 
-const mapStateToProps = state => {
-  return {
-    languages: state.languages.languageList
-  };
-};
+const mapStateToProps = createStructuredSelector({
+    languages: selectLanguageList
+});
 
-export default connect(mapStateToProps)(MovieItem);
+const mapDispatchToProps = dispatch => ({
+    openModal: movie => dispatch(openModal(movie))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieItem);
