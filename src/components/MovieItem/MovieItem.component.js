@@ -4,6 +4,9 @@ import { createStructuredSelector } from 'reselect';
 
 import { openModal } from '../../redux/modal/modal.actions';
 
+import Img from 'react-image';
+import ClipLoader from "react-spinners/ClipLoader";
+
 import { StyledItem } from './MovieItem.style';
 import { selectLanguageList } from '../../redux/languages/languages.selector';
 
@@ -95,7 +98,15 @@ const MovieItem = ({ isListItem, movie, className, languages, openModal }) => {
         <p>Language: {languages[languageId]}</p>
       </div>
       <div className={`${className}__img-container`}>
-        <img src={`https://image.tmdb.org/t/p/w200/${poster}`} className={`${className}__img`}/>
+        {/* <img src={`https://image.tmdb.org/t/p/w200/${poster}`} className={`${className}__img`}/> */}
+        <Img 
+            className='img'
+            src={[
+                `https://image.tmdb.org/t/p/w200/${poster}`,
+            ]}
+            loader={<ClipLoader size={50} color={"#123abc"} />}
+            unloader={'../../assests/unfound.jpg'}
+        />
       </div>
       </> 
      

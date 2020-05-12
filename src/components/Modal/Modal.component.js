@@ -7,6 +7,9 @@ import { selectIsActive, selectMovie } from '../../redux/modal/modal.selector';
 import { selectLanguageList } from '../../redux/languages/languages.selector';
 import { selectGenreList } from '../../redux/genres/genres.selector';
 
+import Img from 'react-image';
+import ClipLoader from "react-spinners/ClipLoader";
+
 import { StyledModal } from './Modal.style';
 
 const Modal = ({ movie, isActive, closeModal, languages, genres }) => {
@@ -50,7 +53,15 @@ const Modal = ({ movie, isActive, closeModal, languages, genres }) => {
                 <p className='genres'>{genresNames.join(', ')}</p>
             </h2>
             <div className='imgContainer'>
-                <img src={`https://image.tmdb.org/t/p/w300/${poster}`} className='img'/>
+                {/* <img src={`https://image.tmdb.org/t/p/w300/${poster}`} className='img'/> */}
+                <Img 
+                    className='img'
+                    src={[
+                        `https://image.tmdb.org/t/p/w300/${poster}`,
+                    ]}
+                    loader={<ClipLoader size={50} color={"#123abc"} />}
+                    unloader={'../../assests/unfound.jpg'}
+                />
             </div> 
             <div className='content'>
                 <p className='overview'>Overview<span>{overview || ''}</span></p>

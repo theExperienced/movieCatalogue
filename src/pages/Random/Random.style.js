@@ -100,14 +100,17 @@ export const StyledRandomPage = styled.div`
         }
 
         & > .imgContainer {
-            display: flex;
-            justify-content: center;
+            ${'' /* display: flex; */}
+            ${'' /* justify-content: center; */}
             overflow: hidden;
-            max-height: 30rem;
-            max-height: 40rem;
+            ${'' /* max-height: 30rem; */}
+            ${'' /* max-height: 40rem; */}
             ${'' /* align-items: center; */}
 
             & > img {
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 border-radius: 10px;
 
             }

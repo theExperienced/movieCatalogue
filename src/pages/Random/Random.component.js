@@ -6,6 +6,8 @@ import { fetchRandomMovie } from '../../redux/movies/movies.actions';
 import { selectRandomMovie } from '../../redux/movies/movies.selector';
 
 import MovieItem from '../../components/MovieItem/MovieItem.component';
+import Img from 'react-image';
+import ClipLoader from "react-spinners/ClipLoader";
 
 import { StyledRandomPage, StyledTitle, StyledButton } from './Random.style';
 import { selectLanguageList } from '../../redux/languages/languages.selector';
@@ -28,8 +30,9 @@ const Random = props => {
   let genresNames;
   
   useEffect(() => {
-    if (!movie)
+    if (!movie) {
       fetchRandomMovie();
+    }
   }, [])
   
   if (movie){
@@ -52,7 +55,15 @@ const Random = props => {
             <p className='genres'>{genresNames.join(', ')}</p>
         </h2>
         <div className='imgContainer'>
-            <img src={`https://image.tmdb.org/t/p/w300/${poster}`} className='img'/>
+            {/* <img src={`https://image.tmdb.org/t/p/w300/${poster}`}/> */}
+            <Img 
+              className='img'
+              src={[
+                `https://image.tmdb.org/t/p/w300/${poster}`,
+              ]}
+              loader={<ClipLoader size={50} color={"#123abc"} />}
+              unloader={<img src={'../../assets/unfound.jpg'} />}
+            />
         </div> 
         <div className='content'>
             <p className='overview'>Overview<span>{overview || ''}</span></p>
