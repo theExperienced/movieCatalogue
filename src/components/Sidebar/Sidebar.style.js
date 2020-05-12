@@ -19,14 +19,14 @@ import { Link } from 'react-router-dom';
 
 export const StyledSidebar = styled.div`
     width: 20%;
-    background-color: ${props => props.theme.sidebarBGColor};
+    background-color: ${({ theme }) => theme.sidebar.bgColor};
     box-shadow: .5rem 0 .5rem rgba(0, 0, 0, .35);
     z-index: 1001;
 `;
 
 export const StyledToggle = styled.button`
     border-radius: 6px;
-    background-color: ${props => props.theme.reverse};
+    background-color: ${({ theme }) => theme.reverse};
     margin: 0 0 2rem 1.5rem;
     width: 1.6rem;
     height: 1.6rem;
@@ -66,7 +66,7 @@ export const StyledMenu = styled.ul`
 
 export const StyledItem = styled.li`
     display: flex;
-    ${'' /* ${setRulesByColorMap('border-color', props => props.theme.colorArray)}; */}
+    ${'' /* ${setRulesByColorMap('border-color', ({ theme }) => colorArray)}; */}
 `;
 
 
@@ -116,7 +116,7 @@ export const StyledLink = styled(Link)`
         content: '';
         width: 1rem;
         height: 100%;
-        background-color: ${({theme, pageNum }) => theme.pageColors[pageNum]};
+        background-color: ${({theme, pageNum }) => theme.page.colors[pageNum]};
         box-shadow: 0 0 3px rgba(255, 255, 255, 1),  0 0 1rem rgba(255, 255, 255,, .1);
         position: absolute;
         right: 0;

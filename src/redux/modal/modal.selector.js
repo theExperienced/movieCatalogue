@@ -9,7 +9,7 @@ export const selectIsActive = createSelector(
 
 export const selectMovie = createSelector(
     [selectModal],
-    modal => {console.log('INSIDE MODAL SELECTOR', modal); return modal.movie}
+    modal => modal.movie
 );
 
 

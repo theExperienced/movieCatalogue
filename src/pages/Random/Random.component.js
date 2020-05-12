@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -8,31 +8,82 @@ import { selectRandomMovie } from '../../redux/movies/movies.selector';
 import MovieItem from '../../components/MovieItem/MovieItem.component';
 
 import { StyledRandomPage, StyledTitle, StyledButton } from './Random.style';
+import { selectLanguageList } from '../../redux/languages/languages.selector';
+import { selectGenreList } from '../../redux/genres/genres.selector';
 
-export class Home extends Component {
-  componentDidMount() {
-    this.props.fetchRandomMovie();
+const Random = props => {
+  const { fetchRandomMovie, movie, languages } = props;
+
+  const {
+      title,
+      genres,
+      overview,
+      vote_average: ratings,
+      release_date: releaseDate,
+      poster_path: poster,
+      backdrop_path: backdrop,
+      original_language: languageId
+  } = movie || {};
+
+  let genresNames;
+  
+  useEffect(() => {
+    if (!movie)
+      fetchRandomMovie();
+  }, [])
+  
+  if (movie){
+    console.log('MOVIE INSIDE RANDOM', movie)
+    genresNames = genres.map(({ name }) => name);
   }
 
-  render() {
-    const { fetchRandomMovie, randomMovie } = this.props;
+  return (
+    <StyledRandomPage page={0}>
+      <button className='generator' onClick={fetchRandomMovie}>
+        ain't hungry yet
+      </button>
+      {movie && 
+      <div className='movie'>
+        <h2 className='title'>
+            {title || ''} &#8226;
+            <span className='year'>{`   (${releaseDate.substr(0,4)})  `}</span>&#8226;
+            <span className='rating'>{`  ${ratings}` || ''} &#9733;{' '} </span>&#8226;
+            <span className='language'>{`  ${languages[languageId]}`}</span>
+            <p className='genres'>{genresNames.join(', ')}</p>
+        </h2>
+        <div className='imgContainer'>
+            <img src={`https://image.tmdb.org/t/p/w300/${poster}`} className='img'/>
+        </div> 
+        <div className='content'>
+            <p className='overview'>Overview<span>{overview || ''}</span></p>
+        </div>
+      </div>}
+    </StyledRandomPage>
 
-    return (
-      <StyledRandomPage>
-        <StyledTitle className='random__heading'>a random appetizer</StyledTitle>
-        <StyledButton className='random__generate-button' onClick={() => fetchRandomMovie()}>
-          ain't hungry yet
-        </StyledButton>
-        {randomMovie && (
-          <MovieItem movie={randomMovie} className='random' />
-        )}
-      </StyledRandomPage>
-    );
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+      // {/* <StyledTitle className='random__heading'>a random appetizer</StyledTitle> */}
+      
+      // {/* {movie && (
+      //   <MovieItem movie={movie} className='random' />
+      // )} */}
+  );
 }
 
 const mapStateToProps = createStructuredSelector({
-    randomMovie: selectRandomMovie
+    movie: selectRandomMovie,
+    languages: selectLanguageList,
+    // genres: selectGenreList
 });
 
-export default connect(mapStateToProps, { fetchRandomMovie })(Home);
+export default connect(mapStateToProps, { fetchRandomMovie })(Random);

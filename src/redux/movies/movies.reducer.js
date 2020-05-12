@@ -40,15 +40,15 @@ export const movieReducer = (state = {}, action) => {
         
         case MovieActionTypes.FETCH_BY_CRITERIA:
             // const { movies, total_pages, isNewQuery } = action.payload;
-
-            if (state.moviesByCriteria && !isNewQuery) {
+            console.log('ERROR FROM FETCH BY CRITERIA REDUCER', movies);
+            if (state.moviesByCriteria && isNewQuery) {
                 return {
                     ...state,
                     moviesByCriteria: {
                         totalPages,
                         movies: [
-                            ...state.moviesByGenre.movies,
-                            movies
+                            ...state.moviesByCriteria.movies,
+                            ...movies
                         ]
                     }
                 };
@@ -58,7 +58,8 @@ export const movieReducer = (state = {}, action) => {
                 ...state,
                 moviesByCriteria: {
                     totalPages,
-                    movies
+                    movies,
+                    page
                 }
             };
 

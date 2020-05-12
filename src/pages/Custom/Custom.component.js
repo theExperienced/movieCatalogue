@@ -1,80 +1,70 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectMoviesByCriteria } from '../../redux/movies/movies.selector';
 
 import { fetchMoviesByCriteria } from '../../redux/movies/movies.actions';
+import { updateFormValues, resubmit } from '../../redux/form/form.actions';
+import { selectForm, selectFormValues } from '../../redux/form/form.selector';
 
-import MoviesByCriteriaForm from '../../components/MoviesByCriteriaForm';
+import CustomForm from '../../components/CustomForm/CustomForm.component';
+import { CriteriaMovieList } from '../../components/MovieList/MovieList.component';
 import MovieItem from '../../components/MovieItem/MovieItem.component';
+import { StyledPage } from '../../GlobalStyle';
+import { StyledFormContainer } from './Custom.style';
 
-export class Custom extends Component {
-    state = {
-        page: 1,
-        isFormVisible: false
+import { ListTokens } from '../../components/MovieList/MovieList.component';
+
+
+
+
+
+
+
+const Custom = props => {
+    const { data, onSubmit, formValues } = props;
+    const [ isFormVisible, setIsFormVisible ] = useState(true);
+    const [ hasSubmitted, setHasSubmitted ] = useState(false);
+    const [ valuesChanged, setValuesChanged ] = useState(false);
+    // const [ formValues, setFormValues ] = useState(null);
+
+    const handleFormToggleClick = () => {
+        toggleForm();                                              ////////PROBABLY NOT NEEDED
     }
 
-    renderMovieList = () => {
-        console.log('PROPS FROM Custom', this.props)
-        if (this.props.movies.movies.length) {
-            return this.props.movies.movies.map(movie => 
-            <MovieItem movie={movie} />
-            );
-        }
-    };
-
-    onFormToggleClick = () => {
-        this.toggleForm();
+    const toggleForm = () => {
+        setIsFormVisible(prevState => !prevState);
     }
 
-    onCustomClick = e => {
-    //   if (this.state.isformVisible && e.)
-    //   this.toggleForm();
+    const handleSubmit = formValues => {
+        setIsFormVisible(prevState => false);
+        setHasSubmitted(prevState => true);
+        resubmit(true);
+        // setFormValues(prevState => formValues);
+        setValuesChanged(true);
     }
 
-    toggleForm = () => {
-        this.setState(prevState =>  ({
-                isFormVisible: !prevState.isFormVisible
-        }));
+    const setValuesUnchanged = () => {
+        setValuesChanged(false);
     }
-
-    onSubmit = ( formValues ) => {
-        const { genre, language, year, voteAverage, withKeywords } = formValues;
-        console.log('FORM VALUES', formValues);
-        // debugger;
-        this.props.fetchMoviesByCriteria(formValues, true);
-        this.toggleForm();
-    }
-
-    componentDidMount() {
-        this.setState(prevState => {
-            return {
-                isFormVisible: true
-            }
-        });
-    }
-
-    render() {
-        return (
-            <div className="custom">
-                <div className={`custom__form-container ${this.state.isFormVisible ? ' custom__form-container--visible' : ''}`}>
-                <MoviesByCriteriaForm onSubmit={this.onSubmit} className="custom"/>
-                
-                <button className="custom__form-toggle" onClick={this.onFormToggleClick}>
-                <span className="custom__form-toggle--left"></span><span className="custom__form-toggle--right"></span>
+    
+    console.log('CHECKING FORM VALUE SINSIDE CUSTOM', valuesChanged)
+    return (
+        <StyledPage>
+            <StyledFormContainer isVisible={isFormVisible}>
+                <button className="custom__form-toggle" onClick={toggleForm}>
+                    &#128269;
                 </button>
-                </div>
-            
-                {this.props.movies && this.renderMovieList()}
-            </div>
-        
-        )
-    }
+                <CustomForm onSubmit={handleSubmit} className="custom"/>
+            </StyledFormContainer>        
+            {(hasSubmitted || data) && <CriteriaMovieList values={formValues} valuesChanged={valuesChanged} setValuesUnchanged={setValuesUnchanged} token={ListTokens.CRITERIA} fetcher={fetchMoviesByCriteria} selector={selectMoviesByCriteria} />}
+        </StyledPage>
+    );
 }
 
-
 const mapStateToProps = createStructuredSelector({
-    movies: selectMoviesByCriteria
+    data: selectMoviesByCriteria,
+    formValues: selectFormValues
 });
 
 export default connect(mapStateToProps, { fetchMoviesByCriteria })(Custom);

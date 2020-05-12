@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -7,8 +7,6 @@ import { fetchMoviesByGenre } from '../../redux/movies/movies.actions';
 import { selectAllMoviesByGenre } from '../../redux/movies/movies.selector';
 
 import { GenreMovieList } from '../MovieList/MovieList.component';
-import PendingIndicator from '../PendingIndicator/PendingIndicator.component';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { StyledListComplex } from './MovieListComplex.style';
 import { StyledListContainer, StyledTitle } from '../MovieList/MovieList.style';
@@ -64,15 +62,6 @@ const MovieListComplex = props => {
 
   return (
     <StyledListComplex id={'listComplex'}>
-      {/* <InfiniteScroll 
-        dataLength={genresLength}
-        hasMore={hasMore}
-        next={addThreeMoreGenres}
-        // scrollableTarget={'listComplex'}
-        height={400}
-        // loader={<h4>Loading...</h4>}
-        onScroll={() => console.log('INFINITLEY SCROLLED')}
-      > */}
       { 
         Object.entries(genres).slice(0, genresNum).map(([value, title], index) => {
             return (
@@ -83,7 +72,6 @@ const MovieListComplex = props => {
             )
           })
       }
-      {/* </InfiniteScroll>  */}
     </StyledListComplex>
   );
 }

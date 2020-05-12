@@ -35,12 +35,12 @@ export const StyledItem = styled.div`
                     justify-content: flex-end; */}
                     height: 30%;
                     z-index: 1;
-                    background-color: ${({ theme: { itemBGColor } }) => itemBGColor};
+                    background-color: ${({ theme }) => theme.item.bgColor};
                     padding: .7rem 1rem;
 
                     & > h3,
                     & > p {
-                        color: ${({ theme: { itemtextColor } }) => itemtextColor};
+                        color: ${({ theme }) => theme.item.textColor};
                     }
 
                     & > h3 {

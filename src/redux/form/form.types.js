@@ -1,0 +1,4 @@
+export default {
+    UPDATE_FORM_VALUES: 'UPDATE_FORM_VALUES',
+    RESUBMIT: 'RESUBMIT'
+};

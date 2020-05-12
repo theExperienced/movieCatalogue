@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -8,6 +8,7 @@ import { StyledItem } from './MovieItem.style';
 import { selectLanguageList } from '../../redux/languages/languages.selector';
 
 const MovieItem = ({ isListItem, movie, className, languages, openModal }) => {
+    const [ isImgLoaded, setIsImgLoaded] = useState(false);
 
     const {
         title,
@@ -34,7 +35,6 @@ const MovieItem = ({ isListItem, movie, className, languages, openModal }) => {
     //   languages
     // } = this.props;
     
-    console.log('PROPS FROM INSDIDE MOVIE ITEM', isListItem)
 
   // const languageUnabrreviated = languages.filter(
   //   language => language.value === languageId
@@ -44,19 +44,41 @@ const MovieItem = ({ isListItem, movie, className, languages, openModal }) => {
 
   const onClick = () => {
     if (isListItem)  {                          //maybe theres a better way to do this without conditional
-      console.log('CLICKED ON MOVIE ITEM')
       openModal(movie);
     }
   } 
 
+  
+  const observer = useRef();
+  const itemRef = useCallback(item => {
+    // if (loading) return
+    if (observer.current) 
+      observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !isImgLoaded) {
+        setIsImgLoaded(true);
+      }
+    }, {rootMargin: '300px'});
+    if (item) observer.current.observe(item)
+  }, [isImgLoaded])  
+
+  const renderItemImg = () => {
+    console.log('RENDERING ITEM IMAGE');
+    return isImgLoaded ?
+      <img src={`https://image.tmdb.org/t/p/w500/${poster}`} className={`${className}__img`}/>
+         :
+      null 
+  }
+
   return (
-    <StyledItem className={`${className}__item`} onClick={onClick} isListItem>
+    <StyledItem className={`${className}__item`} onClick={onClick} isListItem ref={itemRef}>
     
       {
         isListItem                        ?
                      
     <>
-        <img src={`https://image.tmdb.org/t/p/w500/${poster}`} className={`${className}__img`}/> {/*maybe just set the backgonr as img instead of img el*/}
+    {renderItemImg()} {/*maybe just set the backgonr as img instead of img el*/}
         <div>
           <h3>{title}</h3>
           {/* <p>{releaseDate}</p> */}
@@ -74,8 +96,9 @@ const MovieItem = ({ isListItem, movie, className, languages, openModal }) => {
       </div>
       <div className={`${className}__img-container`}>
         <img src={`https://image.tmdb.org/t/p/w200/${poster}`} className={`${className}__img`}/>
-      </div> 
+      </div>
       </> 
+     
 
 
       }
@@ -89,7 +112,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-    openModal: movie => dispatch(openModal(movie))
+    openModal: (movie, sectionNum) => dispatch(openModal(movie, sectionNum))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovieItem);

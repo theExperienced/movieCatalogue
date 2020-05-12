@@ -10,13 +10,13 @@ export const StyledListContainer = styled.div`
             align-item: center;
             justify-content: center; */}
 
-    ${({ isDataReady }) => {
-        if (!isDataReady)
+    ${({ isLoading }) => {
+        if (isLoading)
             return css`
             display: flex;
             height: 15rem;
             width: 100%;
-            align-item: center;
+            align-items: center;
             justify-content: center;
         `
         return css``
@@ -64,9 +64,9 @@ export const StyledListContainer = styled.div`
         ${'' /* width: 3rem;
         height: 3rem; */}
         font-size: 6rem;
-        color: white;
+        color: rgba(0, 0, 0, .5);
         line-height: 1;
-        text-shadow: 1px 1px .8rem rgba(0, 0, 0, .4);
+        text-shadow: 1px 1px .8rem rgba(255, 255, 255, .9994);
         ${'' /* border: 1px solid black; */}
         top: 50%;
         transform: translateY(-50%);
@@ -76,7 +76,8 @@ export const StyledListContainer = styled.div`
         transition: opacity .15s linear;
 
         &:hover {
-            opacity: 0;
+            color: rgba(0, 0, 0, .75);
+            text-shadow: 1px 1px 11.8rem rgba(0, 0, 0, .99964);
         }
     }
 

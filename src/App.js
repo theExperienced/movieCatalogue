@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -6,7 +6,10 @@ import { ThemeProvider } from 'styled-components';
 
 import { fetchLanguages } from './redux/languages/languages.actions';
 import { fetchGenres } from './redux/genres/genres.actions';
-import { selectCurrentTheme } from './redux/theme/theme.selectors';
+import { selectGenreList } from './redux/genres/genres.selector';
+import { fetchMoviesByGenre } from './redux/movies/movies.actions';
+import { selectCurrentTheme } from './redux/theme/theme.selector';
+import { selectIsActive } from './redux/modal/modal.selector';
 
 import Random from './pages/Random/Random.component';
 import BestMovies from './pages/BestMovies';
@@ -14,49 +17,47 @@ import Explore from './pages/Explore';
 import Custom from './pages/Custom/Custom.component';
 
 import Sidebar from './components/Sidebar/Sidebar.component';
+import Modal from './components/Modal/Modal.component';
 
 import { themes } from "./GlobalStyle";
-import { StyledApp } from './App.style';
+import { StyledApp, StyledContainer } from './App.style';
 
-class App extends Component {
-  componentDidMount() {
-    const { fetchLanguages, fetchGenres } = this.props;
-    
+const App = ({ fetchLanguages, fetchGenres, currentTheme, isModalActive }) => { 
+  useEffect(() => {
     fetchLanguages();
     fetchGenres();
-    console.log('FIRST PROPS FORM APP',this.props)
-  }
+  }, []);
 
-  render() {
-    const { currentTheme } = this.props;
-
-    return (
-      <ThemeProvider theme={themes[currentTheme]}>     {/*change theme to concrete one*/}
-        <StyledApp>
-          <Router>
-            <Sidebar />
-            <div className='main-container'>
-              <Switch>
-                <Route exact path='/' component={Random}></Route>
-                <Route exact path='/best' component={BestMovies}></Route>
-                <Route exact path='/explore' component={Explore}></Route>
-                <Route exact path='/custom' component={Custom}></Route>
-              </Switch>
-            </div>
-          </Router>
-        </StyledApp>
-      </ThemeProvider>
-    );
-  }
+  return (
+    <ThemeProvider theme={themes[currentTheme]}>     {/*change theme to concrete one*/}
+      <StyledApp>       
+        <Router>
+          <Sidebar /> 
+          <StyledContainer>
+            {isModalActive && <Modal />}
+            <Switch>
+              <Route exact path='/' component={Random}></Route>
+              <Route exact path='/best' component={BestMovies}></Route>
+              <Route exact path='/explore' component={Explore}></Route>
+              <Route exact path='/custom' component={Custom}></Route>
+            </Switch>
+          </StyledContainer>
+        </Router>
+      </StyledApp>
+    </ThemeProvider>
+  );
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentTheme: selectCurrentTheme
+  currentTheme: selectCurrentTheme,
+  genres: selectGenreList,
+  isModalActive: selectIsActive
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchLanguages: () => dispatch(fetchLanguages()),
   fetchGenres: () => dispatch(fetchGenres()),
+  fetchMoviesByGenre: (genreId, page) => dispatch(fetchMoviesByGenre(genreId, page)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

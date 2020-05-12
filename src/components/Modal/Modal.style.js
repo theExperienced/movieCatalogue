@@ -2,14 +2,19 @@ import styled, { css } from 'styled-components';
 
 export const StyledModal = styled.div`
     position: fixed;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-column-gap: 2rem;
+    grid-row-gap: 1rem;
     width: 80%;
     height: 100vh;
-    background-image: radial-gradient(80deg, #121111 55%, transparent), url(https://image.tmdb.org/t/p/w780/h1JzHjFJXNJb3QTCwWmm2UbWEwn.jpg);
-    ${'' /* background-size: cover; */}
-    background-position: right center;
-    background-repeat: no-repeat;
+    background-image: ${({ modal}) => css`linear-gradient(to right, rgba(theme.modal.bgColor, 1) 30%, rgba(theme.modal.bgColor, .85))`}, 
+                        url(https://image.tmdb.org/t/p/w780/h1JzHjFJXNJb3QTCwWmm2UbWEwn.jpg);
+    background-size: cover;
+    background-position: center;
+    ${'' /* background-repeat: no-repeat; */}
     z-index: 1000;
-    padding: 3rem 16.5rem 3rem 3.5rem;
+    padding: 5.5rem 8rem 8rem 4.5rem;
     transition: opacity .15s linear;
 
     ${({isActive}) => isActive ?
@@ -30,24 +35,80 @@ export const StyledModal = styled.div`
         cursor: pointer;
     }
 
-    & > .content {
-        display: grid;
-        grid-row-gap: 1rem;
+    & > .title {
+        grid-column: 1 / 3;
+        font-size: 2rem;
+        color: rgba(${({ theme }) => theme.modal.textColor}, .9);
 
-        & > .title {
-            font-size: 3rem;
-            padding: .5rem 1.2rem;
-            background-color: rgba(255, 255, 255, .8);
-            width: max-content;
-            border-radius: 5px;
-            color: #21262e;
-            box-shadow: 0 .5rem .5rem rgba(0, 0, 0, .2);
-            transform: skewX(-7deg);
+        & > .genres {
+            color: rgba(${({ theme }) => theme.modal.textColor}, .7);
+            margin-top: 6.5px;
+            font-size: 1rem;
+            line-height: 1;
         }
+
+        & > .year {
+            font-size: 1.8rem;
+            font-weight: 100;
+            color: rgba(${({ theme }) => theme.modal.textColor}, .7); 
+        }
+
+        & > .rating {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: rgba(${({ theme }) => theme.modal.textColor}, .7);
+        }
+
+        & > .language {
+            font-weight: 700;
+            font-size: 1.35rem;
+            color: rgba(${({ theme }) => theme.modal.textColor}, .7);
+        }
+    }
+
+    & > .imgContainer
+    & > .content {
+        
+    }
+
+    & > .imgContainer {
+        display: flex;
+        justify-content: center;
+        ${'' /* align-items: center; */}
+
+        & > img {
+            ${'' /* width: 100%; */}
+            ${'' /* height: 100%; */}
+            border-radius: 10px;
+        }
+    }
+    
+
+    & > .content {
+        display: flex;
+        flex-direction: column;
+
+        
+
+        
 
         & > .overview {
-            font-size: 1.5rem;
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: auto;
+            color: rgba(${({ theme }) => theme.modal.textColor}, .9);
+
+            & > span {
+                margin-top: 1rem;
+                display: block;
+                font-size: 1.1rem;
+                color: rgba(${({ theme }) => theme.modal.textColor}, .7);
+                font-weight: 100;
+                line-height: 1.55;
+                padding-right: 15rem;
+            }
         }
+
     }
 
 

@@ -19,6 +19,11 @@ export const store = createStore(
         modal: {
             isActive: false,
             movie: null
+        },
+        form: {
+            CustomForm:{
+                values: {}
+            }
         }
     },
     composeEnhancers(applyMiddleware(...middlewares))

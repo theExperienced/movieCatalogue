@@ -1,60 +1,48 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { fetchMoviesByGenre, fetchBestMovies, fetchMoviesByCriteria } from '../../redux/movies/movies.actions';
+import { updateFormValues, resubmit } from '../../redux/form/form.actions';
 import { selectMoviesByGenre, selectBestMovies, selectMoviesByCriteria } from '../../redux/movies/movies.selector';
 import { selectGenreList } from '../../redux/genres/genres.selector';
+import { selectFormValues, selectSubmitSucceeded } from '../../redux/form/form.selector';
 
 import MovieItem from '../MovieItem/MovieItem.component';
-import PendingIndicator from '../PendingIndicator/PendingIndicator.component';
+import ClipLoader from "react-spinners/ClipLoader";
 
 import { StyledListContainer, StyledList, StyledTitle } from './MovieList.style';
 
-const MovieList = ({ isGenreList,  data, genreId, listData, selector, fetchMovies }) => {
+export const ListTokens = {
+  GENERAL: 'GENERAL',
+  GENRE: 'GENRE',
+  CRITERIA: 'CRITERIA'
+}
+
+const MovieList = (props) => {
+const { data, fetchMovies, values, submitSucceeded, resubmitted, listToken, valuesChanged, setValuesUnchanged } = props;
+
   const [ atLeftEnd, setAtLeftEnd ] = useState(true);
   const [ atRightEnd, setAtRightEnd ] = useState(false);
   const [ scrollOffset, setScrollOffset ] = useState(0);
 
   useEffect(() => {
-    console.log('INSIDE MOVIE LIFE USEEFFECT', data)
-    fetchMovies();
+    console.log('INSIDE MOVIE LIFE USEEFFECT', values)
+    // formValues ? fetchMovies(formValues) : 
+    if (!data || (listToken === ListTokens.CRITERIA && valuesChanged)) {
+      fetchMovies();
+      // props.setValuesUnchanged();
+    }
   }, [])
-  // renderGeneralList = movies => {
-  //   return (<StyledList>
-  //     {
-  //       movies.map(movie => <MovieItem movie={movie} isListItem/>)
-  //     }
-  //     </StyledList>);
-  // }
-  // useEffect(() => {
-  //   effect
-  //   return () => {
-  //     cleanup
-  //   }
-  // }, [input])
-  // renderGenreList = () => {
-  //   const { genreTitle, genreData } = this.props;
 
-  //   return (<div>
-  //   <StyledTitle>{genreTitle}</StyledTitle>   
-  //   <StyledListContainer>
-  //       {
-  //         genreData ?
-  //       <StyledList>
-  //         {
-  //           genreData.movies.map(movie => <MovieItem movie={movie} isListItem/>) 
-  //         }
-  //     </StyledList> : 
-  //     <PendingIndicator />
-  //       }
-  //   </StyledListContainer>
-  //    </div>);
-  // }
-  // const movies = gen
-  // const { genreTitle } = listData;
+  useEffect(() => {
+    // formValues ? fetchMovies(formValues) : 
+    if (data && listToken === ListTokens.CRITERIA && valuesChanged) {
+      fetchMovies();
+      props.setValuesUnchanged();
+    }
+  }, [values])
 
-  // console.log('PROPS FROM MOVIE LIST ', movieList, listData, gore)
   const onWheel = (e, delta = 100) => {
     const { target, deltaY } = e;
     console.log('WHEELING HORZIONTALLY', delta, target)
@@ -62,26 +50,9 @@ const MovieList = ({ isGenreList,  data, genreId, listData, selector, fetchMovie
     // e.stopPropagation();
     e.preventDefault();
   }
-
-  // const onScroll = e => {
-  //   const { scrollLeft, clientWidth, scrollWidth } = e.target;
-  //   const maxScrollLeft = scrollWidth - clientWidth;
-
-  //   if (scrollLeft === 0) {
-  //     console.log('REACHED LEFT END', scrollLeft)
-  //     setAtLeftEnd(true);
-  //   }else if (scrollLeft === maxScrollLeft) {
-  //     console.log('REACHED RIGHT END', maxScrollLeft)
-  //     setAtRightEnd(true);
-  //   }else {
-  //     setAtLeftEnd(false);
-  //     setAtRightEnd(false);
-  //   }
-  //   console.log('SCROLLING HORZIONTALLY', maxScrollLeft, scrollLeft)
-  // }
-
-const rootElemRem = 16;
-const delta = 25.2 * rootElemRem * 3;
+  
+  const rootElemRem = 16;
+  const delta = 25.2 * rootElemRem * 3;
 
   const scroll = ({ target }, dir) => {
     const list = target.parentElement.lastElementChild;
@@ -107,10 +78,14 @@ const delta = 25.2 * rootElemRem * 3;
       setAtRightEnd(false);
     }
 
-    if (target.scrollLeft >= clientWidth - 150) {
+    console.log('scrolling CURRENT LIST', data)
+
+    if (newOffset >= clientWidth - 650) {
       const { page, totalPages} = data;
-      if (page + 1 <= totalPages)
-        fetchMovies(data.page + 1);
+      if (page + 1 <= totalPages) {
+      console.log('REAHED END OF CURRENT LIST')
+        /*values? fetchMovies(values, data.page + 1):*/ fetchMovies(data.page + 1);
+      }
     }
   }
 
@@ -125,7 +100,7 @@ const delta = 25.2 * rootElemRem * 3;
 
   return (
     
-    <StyledListContainer atLeftEnd={atLeftEnd} atRightEnd={atRightEnd}>
+    <StyledListContainer atLeftEnd={atLeftEnd} atRightEnd={atRightEnd} isLoading={ data ? false : true}>
       <span className="leftEnd" onClick={e => scroll(e, -1)}>&#8249;</span>
       <span className="rightEnd" onClick={e => scroll(e, 1)}>&#8250;</span>
       {data ? 
@@ -134,7 +109,7 @@ const delta = 25.2 * rootElemRem * 3;
               data.movies.map(movie => <MovieItem movie={movie} isListItem/>) 
             }
           </StyledList> :
-          <PendingIndicator />
+          <ClipLoader size={50} color={"#123abc"} />
       }
     </StyledListContainer>
   )
@@ -149,14 +124,24 @@ const mapDispatchToPropsGenres = (dispatch, { genreId, fetcher }) => ({
   fetchMovies: (pageNum = 1) => dispatch(fetcher(genreId, pageNum))
 });
 
-const mapStateToProps = (state, { selector }) => ({
-  data: selector(state) //isBestMovies ? selectBestMovies(state) : selectMoviesByCriteria(state)
+const mapStateToPropsCriteria = (state) => ({
+  data: selectMoviesByCriteria(state),
+  formValues: selectFormValues(state),
+  submitSucceeded: selectSubmitSucceeded(state)
 });
 
-const mapDispatchToProps = (dispatch, { fetcher }) => ({
-  // fetchMovies: isBestMovies ? page => dispatch(fetchBestMovies(page)) : (formValues, page, isNewQuery) => dispatch(fetchMoviesByCriteria(formValues, page, isNewQuery))
+const mapDispatchToPropsCriteria = (dispatch, { values, fetcher }) => ({
+  fetchMovies: (pageNum = 1) => dispatch(fetcher(values, pageNum))
+});
+
+const mapStateToProps = (state, { selector }) => ({
+  data: selector(state), //isBestMovies ? selectBestMovies(state) : selectMoviesByCriteria(state)
+});
+
+const mapDispatchToProps = (dispatch, { fetcher, formValues }) => ({
   fetchMovies: (pageNum = 1) => dispatch(fetcher(pageNum))
 });
 
 export const GenreMovieList = connect(mapStateToPropsGenres, mapDispatchToPropsGenres)(MovieList);
+export const CriteriaMovieList = connect(mapStateToPropsCriteria, mapDispatchToPropsCriteria)(MovieList);
 export const GeneralMovieList = connect(mapStateToProps, mapDispatchToProps)(MovieList);

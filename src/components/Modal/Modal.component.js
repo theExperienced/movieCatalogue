@@ -5,12 +5,15 @@ import { createStructuredSelector } from 'reselect';
 import { closeModal } from '../../redux/modal/modal.actions';
 import { selectIsActive, selectMovie } from '../../redux/modal/modal.selector';
 import { selectLanguageList } from '../../redux/languages/languages.selector';
+import { selectGenreList } from '../../redux/genres/genres.selector';
 
 import { StyledModal } from './Modal.style';
 
-const Modal = ({ movie, isActive, closeModal, languages }) => {
+const Modal = ({ movie, isActive, closeModal, languages, genres }) => {
+    console.log('movie from modal', movie)
     const {
         title,
+        genre_ids: genresIds,
         overview,
         vote_average: ratings,
         release_date: releaseDate,
@@ -19,8 +22,14 @@ const Modal = ({ movie, isActive, closeModal, languages }) => {
         original_language: languageId
     } = movie || {};
 
+    const genresNames = genresIds.map(id => genres[id]);
+    // const preProcess = () => {
+
+    // }
+    // let ownGenres;
+
     useEffect(() => {
-        
+        // ownGenres = genreIds.map(id => genres[id]);
     });
 
     const className = 'kaki';
@@ -30,18 +39,23 @@ const Modal = ({ movie, isActive, closeModal, languages }) => {
 
     return (
         isActive ? 
-        <StyledModal isActive={isActive}>
+        <StyledModal isActive={isActive} backdrop={backdrop}>
             <button className='exit' onClick={onClick}>&#x274C;</button>
+            
+            <h2 className='title'>
+                {title || ''} 
+                <span className='year'>{`  (${releaseDate.substr(0,4)})  `}</span>
+                <span className='rating'>{`${ratings}` || ''} &#9733;{' '} </span>
+                <span className='language'>{languages[languageId]}</span>
+                <p className='genres'>{genresNames.join(', ')}</p>
+            </h2>
+            <div className='imgContainer'>
+                <img src={`https://image.tmdb.org/t/p/w300/${poster}`} className='img'/>
+            </div> 
             <div className='content'>
-                <h2 className='title'>{title || ''}</h2>
-                <p className='overview'>{overview || ''}</p>
-                <p className='rating'>{ratings || ''} &#9733;</p>
-                <p className='release'>{releaseDate.substr(0, 4) || ''}</p>
-                <p className='language'>{languages[languageId]}</p>
+                <p className='overview'>Overview<span>{overview || ''}</span></p>
             </div>
-            {/* <div className={`${className || ''}__img-container`}>
-                <img src={`https://image.tmdb.org/t/p/w200/${poster}`} className={`${className || ''}__img`}/>
-            </div>  */}
+            
         </StyledModal> :
         null
         
@@ -57,7 +71,8 @@ const Modal = ({ movie, isActive, closeModal, languages }) => {
 const mapStateToProps = createStructuredSelector({
     isActive: selectIsActive,
     movie: selectMovie,
-    languages: selectLanguageList
+    languages: selectLanguageList,
+    genres: selectGenreList
 });
 
 
