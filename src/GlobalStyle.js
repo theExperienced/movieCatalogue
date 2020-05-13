@@ -121,7 +121,7 @@ export const themes = {
         reverse: 'rgba(0, 0, 0, .85)',
         modal: {
             textColor: '0, 0, 0',
-            bgColor: '64, 53, 31'
+            bgColor: '20, 20, 20'
         }
     }
   };
