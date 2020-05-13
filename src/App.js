@@ -31,9 +31,9 @@ const App = ({ fetchLanguages, fetchGenres, currentTheme, isModalActive }) => {
 
   return (
         
-    <StyledApp>  
-      <GlobalStyle />
-      <ThemeProvider theme={themes[currentTheme]}>     
+    <ThemeProvider theme={themes[currentTheme]} >
+      <GlobalStyle />    
+      <StyledApp>  
         <Router>
           <Sidebar /> 
           <StyledContainer>
@@ -46,8 +46,8 @@ const App = ({ fetchLanguages, fetchGenres, currentTheme, isModalActive }) => {
             </Switch>
           </StyledContainer>
         </Router>
-      </ThemeProvider>
-    </StyledApp>
+      </StyledApp>
+    </ThemeProvider>
     
   );
 }
