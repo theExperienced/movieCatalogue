@@ -36,7 +36,7 @@ export const StyledToggle = styled.button`
 export const StyledTitleContainer = styled.div`
     padding: 1.5rem 0 ;
     ${'' /* margin-bottom: 5rem; */}
-    border-bottom: 1rem solid #78683c;
+    ${'' /* border-bottom: 1rem solid #78683c; */}
     font-size: 3rem;
     line-height: 1.1;
 `

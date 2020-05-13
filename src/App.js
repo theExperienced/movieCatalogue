@@ -19,6 +19,7 @@ import Custom from './pages/Custom/Custom.component';
 import Sidebar from './components/Sidebar/Sidebar.component';
 import Modal from './components/Modal/Modal.component';
 
+import { GlobalStyle } from "./GlobalStyle";
 import { themes } from "./GlobalStyle";
 import { StyledApp, StyledContainer } from './App.style';
 
@@ -31,6 +32,7 @@ const App = ({ fetchLanguages, fetchGenres, currentTheme, isModalActive }) => {
   return (
         
     <StyledApp>  
+      <GlobalStyle />
       <ThemeProvider theme={themes[currentTheme]}>     
         <Router>
           <Sidebar /> 
