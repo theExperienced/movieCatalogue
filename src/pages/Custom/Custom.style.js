@@ -23,11 +23,11 @@ export const StyledFormContainer = styled.div`
         width: 2.5rem;
         height: 2.5rem;
         right: -2.5rem;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: (${({ isVisible }) => {
+        top: 30%;
+        ${'' /* transform: translateY(-50%); */}
+        opacity: ${({ isVisible }) => {
             return isVisible ? 1 : .35;
-        }});
+        }};
     }
 `;
 

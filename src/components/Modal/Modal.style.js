@@ -8,8 +8,9 @@ export const StyledModal = styled.div`
     grid-row-gap: 1rem;
     width: 80%;
     height: 100vh;
-    background-image: ${({ modal}) => css`linear-gradient(to right, rgba(theme.modal.bgColor, 1) 30%, rgba(theme.modal.bgColor, .85))`}, 
-                        url(https://image.tmdb.org/t/p/w780/h1JzHjFJXNJb3QTCwWmm2UbWEwn.jpg);
+    background-image: ${({ theme, backdrop }) => css`linear-gradient(to right, rgba(${theme.modal.bgColor}, .97) 30%, rgba(${theme.modal.bgColor}, .75)), 
+                        url(https://image.tmdb.org/t/p/w780/${backdrop});`}       
+                        ${'' /* h1JzHjFJXNJb3QTCwWmm2UbWEwn.jpg); */}
     background-size: cover;
     background-position: center;
     ${'' /* background-repeat: no-repeat; */}
@@ -32,7 +33,15 @@ export const StyledModal = styled.div`
         position: absolute;
         top: 2rem;
         right: 2rem;
+        font-size: 3rem;
+        background: none;
+        color: rgba(255, 255, 255, .85);
         cursor: pointer;
+        transition: all .1s linear;
+
+        &:hover {
+            color: white;
+        }
     }
 
     & > .title {

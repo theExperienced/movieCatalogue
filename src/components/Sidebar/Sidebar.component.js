@@ -8,8 +8,10 @@ import { selectGenreList } from '../../redux/genres/genres.selector';
 import { closeModal } from '../../redux/modal/modal.actions';
 import { selectIsActive } from '../../redux/modal/modal.selector';
 
-import { StyledSidebar, StyledToggle, StyledTitleContainer, StyledTitle, StyledMenu, StyledItem, StyledLink } from './Sidebar.style';
-import SidebarLink from '../SidebarLink/SidebarLink.component';
+import ToggleButton from 'react-toggle-button';
+
+import { StyledSidebar, StyledTitleContainer, StyledTitle, StyledMenu, StyledItem, StyledLink } from './Sidebar.style';
+// import SidebarLink from '../SidebarLink/SidebarLink.component';
 
 const Sidebar = ({ toggleTheme, isModalOpen, closeModal }) => {
   const [ currPage, setCurrPage ] = useState(0);
@@ -43,24 +45,63 @@ const Sidebar = ({ toggleTheme, isModalOpen, closeModal }) => {
     return (
       <StyledSidebar>
         <StyledTitleContainer>
-        <StyledToggle onClick={onThemeClick}></StyledToggle>
+        {/* <Toggle onChange={onThemeClick} /> */}
+
+
+
+
+
+
+
+        <ToggleButton
+        style={{marginBottom: '5rem'}}
+          inactiveLabel={''}
+          activeLabel={''}
+          colors={{
+            activeThumb: {
+              base: 'rgb(250,250,250)',
+            },
+            inactiveThumb: {
+              base: 'rgb(62,130,247)',
+            },
+            active: {
+              base: 'rgb(207,221,245)',
+              hover: 'rgb(177, 191, 215)',
+            },
+            inactive: {
+              base: 'rgb(65,66,68)',
+              hover: 'rgb(95,96,98)',
+            }
+          }}
+          // trackStyle={styles.trackStyle}
+          // thumbStyle={styles.thumbStyle}
+          thumbAnimateRange={[-10, 36]}
+          // thumbIcon={<ThumbIcon/>}
+          // value={self.state.value}
+          onToggle={toggleTheme} />
+
+
+
+
+
+
+        {/* <ToggleButton
+          id='cheese-status'
+          onChange={onThemeClick} /> */}
+
+          {/* <StyledToggle className='toggle'>
+            <input type='checkbox'/>
+            <div className='track'></div>
+            <div className='thumb'></div>
+          </StyledToggle> */}
+
+
+
+        {/* </Toggle> */}
           <StyledTitle>Movie<br/>Guide</StyledTitle>
         </StyledTitleContainer>
-        <StyledMenu activePage={currPage}>
-
-        {renderMenuItems()}
-          {/* <StyledItem>
-            <StyledLink to='/' onClick={() => onLinkClick(0)}>Appetizer</StyledLink>
-          </StyledItem>
-          <StyledItem>
-            <StyledLink to='/best' onClick={() => onLinkClick(1)}>Top 1's</StyledLink>
-          </StyledItem>
-          <StyledItem>
-            <StyledLink to='/explore' onClick={() => onLinkClick(2)}>By Genre</StyledLink>
-          </StyledItem>
-          <StyledItem>
-            <StyledLink to='/custom' onClick={() => onLinkClick(3)}>Custom</StyledLink>
-          </StyledItem> */}
+        <StyledMenu> {/*activePage={currPage}*/}
+          {renderMenuItems()}
         </StyledMenu>
       </StyledSidebar>
     );

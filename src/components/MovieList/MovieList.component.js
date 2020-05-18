@@ -19,37 +19,24 @@ export const ListTokens = {
   CRITERIA: 'CRITERIA'
 }
 
-const MovieList = (props) => {
-const { data, fetchMovies, values, submitSucceeded, resubmitted, listToken, valuesChanged, setValuesUnchanged } = props;
+const MovieList = props => {
+const { data, fetchMovies, values, listToken, valuesChanged } = props;
 
   const [ atLeftEnd, setAtLeftEnd ] = useState(true);
   const [ atRightEnd, setAtRightEnd ] = useState(false);
   const [ scrollOffset, setScrollOffset ] = useState(0);
 
   useEffect(() => {
-    console.log('INSIDE MOVIE LIFE USEEFFECT', values)
-    // formValues ? fetchMovies(formValues) : 
-    if (!data || (listToken === ListTokens.CRITERIA && valuesChanged)) {
+    if (!data || (listToken === ListTokens.CRITERIA && valuesChanged))
       fetchMovies();
-      // props.setValuesUnchanged();
-    }
   }, [])
 
   useEffect(() => {
-    // formValues ? fetchMovies(formValues) : 
     if (data && listToken === ListTokens.CRITERIA && valuesChanged) {
       fetchMovies();
       props.setValuesUnchanged();
     }
   }, [values])
-
-  const onWheel = (e, delta = 100) => {
-    const { target, deltaY } = e;
-    console.log('WHEELING HORZIONTALLY', delta, target)
-    deltaY > 0 ? target.parentElement.parentElement.scrollLeft += delta : target.parentElement.parentElement.scrollLeft -= delta;
-    // e.stopPropagation();
-    e.preventDefault();
-  }
   
   const rootElemRem = 16;
   const delta = 25.2 * rootElemRem * 3;
@@ -78,28 +65,14 @@ const { data, fetchMovies, values, submitSucceeded, resubmitted, listToken, valu
       setAtRightEnd(false);
     }
 
-    console.log('scrolling CURRENT LIST', data)
-
-    if (newOffset >= clientWidth - 650) {
+    if (newOffset >= clientWidth - 800) {
       const { page, totalPages} = data;
-      if (page + 1 <= totalPages) {
-      console.log('REAHED END OF CURRENT LIST')
-        /*values? fetchMovies(values, data.page + 1):*/ fetchMovies(data.page + 1);
-      }
+      if (page + 1 <= totalPages) 
+       fetchMovies(data.page + 1);
     }
   }
 
-  
-  // const keepTrackOfEnds = e => {
-  //   const { target, deltaY } = e;
-  //   console.log('WHEELING HORZIONTALLY', delta, target)
-  //   deltaY > 0 ? target.parentElement.parentElement.scrollLeft += delta : target.parentElement.parentElement.scrollLeft -= delta;
-  // }
-  console.log('RENDERING NEW MOVIE LIST', data)
-
-
   return (
-    
     <StyledListContainer atLeftEnd={atLeftEnd} atRightEnd={atRightEnd} isLoading={ data ? false : true}>
       <span className="leftEnd" onClick={e => scroll(e, -1)}>&#8249;</span>
       <span className="rightEnd" onClick={e => scroll(e, 1)}>&#8250;</span>

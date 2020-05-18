@@ -42,8 +42,8 @@ const Modal = ({ movie, isActive, closeModal, languages, genres }) => {
 
     return (
         isActive ? 
-        <StyledModal isActive={isActive} backdrop={backdrop}>
-            <button className='exit' onClick={onClick}>&#x274C;</button>
+        <StyledModal isActive={isActive} backdrop={backdrop} backdropFallback={''}>
+            <button className='exit' onClick={onClick}>&#215;</button>
             
             <h2 className='title'>
                 {title || ''} 
@@ -60,7 +60,7 @@ const Modal = ({ movie, isActive, closeModal, languages, genres }) => {
                         `https://image.tmdb.org/t/p/w300/${poster}`,
                     ]}
                     loader={<ClipLoader size={50} color={"#123abc"} />}
-                    unloader={'../../assests/unfound.jpg'}
+                    unloader={<img src={require('../../assets/unfound.jpg')} />}
                 />
             </div> 
             <div className='content'>

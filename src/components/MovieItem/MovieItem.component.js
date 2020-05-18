@@ -105,7 +105,7 @@ const MovieItem = ({ isListItem, movie, className, languages, openModal }) => {
                 `https://image.tmdb.org/t/p/w200/${poster}`,
             ]}
             loader={<ClipLoader size={50} color={"#123abc"} />}
-            unloader={'../../assests/unfound.jpg'}
+            unloader={<img src={require('../../assets/unfound.jpg')} />}
         />
       </div>
       </> 

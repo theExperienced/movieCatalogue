@@ -62,7 +62,7 @@ const Random = props => {
                 `https://image.tmdb.org/t/p/w300/${poster}`,
               ]}
               loader={<ClipLoader size={50} color={"#123abc"} />}
-              unloader={<img src={'../../assets/unfound.jpg'} />}
+              unloader={<img src={require('../../assets/unfound.jpg')} />}
             />
         </div> 
         <div className='content'>

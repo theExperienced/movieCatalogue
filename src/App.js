@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Route, HashRouter as Router, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { ThemeProvider } from 'styled-components';
@@ -32,9 +32,9 @@ const App = ({ fetchLanguages, fetchGenres, currentTheme, isModalActive }) => {
   return (
         
     <ThemeProvider theme={themes[currentTheme]} >
-      <GlobalStyle />    
-      <StyledApp>  
-        <Router>
+          
+      <StyledApp>
+        <Router>  
           <Sidebar /> 
           <StyledContainer>
             {isModalActive && <Modal />}

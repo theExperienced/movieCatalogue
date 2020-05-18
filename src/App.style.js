@@ -6,7 +6,7 @@ export const StyledApp = styled.div`
     ${'' /* display: grid;
     grid-template-columns: 25vw 75vw; */}
     ${'' /* grid-template-rows: 100vh; */}
-    max-height: 100vh;
+    height: 100vh;
     ${'' /* height: 100vh; */}
 `;
 

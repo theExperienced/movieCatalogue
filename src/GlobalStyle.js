@@ -57,7 +57,7 @@ export const StyledPage = styled.div`
         text-transform: uppercase;
         margin-left: 4rem;
         font-weight: 900;
-        font-size: 5rem;
+        font-size: 4rem;
         text-shadow: 1px 2px 0 black, 1px 2px .5rem black;
         line-height: 1;
         color: ${({ theme, page }) => theme.page.colors[page]};
@@ -65,7 +65,7 @@ export const StyledPage = styled.div`
     }
 
     ${({ page }) => {
-        if (page === 1) {
+        if (page === 1 || page === 3) {
             return css`
                 & > h1 {
                     margin-bottom: 10rem;
@@ -78,7 +78,9 @@ export const StyledPage = styled.div`
 export const themes = {
     dark: {
         sidebar: {
-            bgColor: 'rgba(0, 0, 0, .85)'
+            bgColor: 'rgba(0, 0, 0, .85)',
+            linkTextColor: 'rgba(255, 255, 255, .45)',
+            titleTextColor: 'rgba(255, 255, 255, .9)'
         },
         page: {
             bgColor: 'rgba(0, 0, 0, .9)',
@@ -91,37 +93,40 @@ export const themes = {
         },
         genreColor: 'rgba(255, 255, 255, .9)',
         item: {
-            bgColor: 'rgba(0, 0, 0, .6)',
+            overlayColor: 'rgba(0, 0, 0, .6)',
             textColor: 'rgba(255, 255, 255, .9)'
         },
-        reverse: 'rgba(0, 0, 0, .05)',
+        inverse: 'rgba(0, 0, 0, .05)',
         modal: {
             textColor: '255, 255, 255',
-            bgColor: '64, 53, 31'
+            bgColor: '20, 20, 20'
         }
     },
     light: {
         sidebar: {
-            bgColor: 'rgba(0, 0, 0, .85)'
+            bgColor: 'rgb(232, 195, 201)',
+            linkTextColor: 'rgb(54, 44, 45)',
+            titleTextColor: 'rgb(138, 58, 66)'
         },
         page: {
-            bgColor: 'rgba(0, 0, 0, .9)',
+            bgColor: 'rgb(235, 218, 221)',
             colors: [
-                'rgba(137, 0, 242, 1)',
-                'rgba(177, 0, 232, 1)',
-                'rgba(209, 0, 209, 1)',
-                'rgba(229, 0, 164, 1)'
+                'rgba(110, 20, 35, 1)',
+                'rgba(167, 30, 52, 1)',
+                'rgba(199, 31, 55, 1)',
+                'rgba(224, 30, 55, 1)'
             ]
         },
         genreColor: 'rgba(255, 255, 255, .9)',
         item: {
-            bgColor: 'rgba(0, 0, 0, .6)',
-            textColor: 'rgba(255, 255, 255, .9)'
+            overlayColor: 'rgba(255, 255, 255, .9)',
+            textColor: 'rgba(0, 0, 0, .6)',
+            boxShadow: '0 3px 5px rgba(0, 0, 0, .3)'
         },
-        reverse: 'rgba(0, 0, 0, .85)',
+        inverse: 'rgba(0, 0, 0, .85)',
         modal: {
             textColor: '0, 0, 0',
-            bgColor: '64, 53, 31'
+            bgColor: '255, 255, 255'
         }
     }
   };

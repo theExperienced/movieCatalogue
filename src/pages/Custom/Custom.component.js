@@ -50,13 +50,14 @@ const Custom = props => {
     
     console.log('CHECKING FORM VALUE SINSIDE CUSTOM', valuesChanged)
     return (
-        <StyledPage>
+        <StyledPage page={3}>
             <StyledFormContainer isVisible={isFormVisible}>
                 <button className="custom__form-toggle" onClick={toggleForm}>
                     &#128269;
                 </button>
                 <CustomForm onSubmit={handleSubmit} className="custom"/>
-            </StyledFormContainer>        
+            </StyledFormContainer>     
+            <h1 className='title'>Fine tuned</h1>   
             {(hasSubmitted || data) && <CriteriaMovieList values={formValues} valuesChanged={valuesChanged} setValuesUnchanged={setValuesUnchanged} token={ListTokens.CRITERIA} fetcher={fetchMoviesByCriteria} selector={selectMoviesByCriteria} />}
         </StyledPage>
     );

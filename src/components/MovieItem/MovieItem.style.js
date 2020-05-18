@@ -4,6 +4,7 @@ export const StyledItem = styled.div`
     display: flex;
     align-items: flex-end;
     overflow: hidden;
+    ${({ theme }) => theme.item.boxShadow ? `box-shadow: ${theme.item.boxShadow }` : '' };
 
     ${({isListItem, poster}) => {
         if (isListItem) 
@@ -35,7 +36,7 @@ export const StyledItem = styled.div`
                     justify-content: flex-end; */}
                     height: 30%;
                     z-index: 1;
-                    background-color: ${({ theme }) => theme.item.bgColor};
+                    background-color: ${({ theme }) => theme.item.overlayColor};
                     padding: .7rem 1rem;
 
                     & > h3,

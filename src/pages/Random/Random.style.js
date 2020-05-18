@@ -3,23 +3,6 @@ import { StyledPage } from '../../GlobalStyle';
 
 
 
-// export const StyledTitle = styled.h1`
-//     grid-row: 1 / 2;
-// `;
-
-
-
-
-
-// export const StyledRandomPage = styled(StyledPage)`
-//     grid-template-rows: max-content;
-//     grid-row-gap: 15vh;
-    
-
-    
-// `;
-
-
 
 export const StyledRandomPage = styled.div`
     position: relative;
@@ -45,7 +28,6 @@ export const StyledRandomPage = styled.div`
         grid-template-rows: min-content;
         grid-column-gap: 2rem;
         grid-row-gap: 2.5rem;
-        height: 100vh;
         background-image: ${({ modal}) => css`linear-gradient(to right, rgba(theme.modal.bgColor, 1) 30%, rgba(theme.modal.bgColor, .85))`}, 
                             url(https://image.tmdb.org/t/p/w780/h1JzHjFJXNJb3QTCwWmm2UbWEwn.jpg);
         background-size: cover;
