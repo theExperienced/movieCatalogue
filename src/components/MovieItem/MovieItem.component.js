@@ -11,50 +11,27 @@ import { StyledItem } from './MovieItem.style';
 import { selectLanguageList } from '../../redux/languages/languages.selector';
 
 const MovieItem = ({ isListItem, movie, className, languages, openModal }) => {
-    const [ isImgLoaded, setIsImgLoaded] = useState(false);
+  const [ isImgLoaded, setIsImgLoaded] = useState(false);
 
-    const {
-        title,
-        overview,
-        vote_average: ratings,
-        release_date: releaseDate,
-        poster_path: poster,
-        backdrop_path: backdrop,
-        profile_path: profile,
-        original_language: languageId
-    } = movie;
+  const {
+      title,
+      overview,
+      vote_average: ratings,
+      release_date: releaseDate,
+      poster_path: poster,
+      backdrop_path: backdrop,
+      profile_path: profile,
+      original_language: languageId
+  } = movie;
   
-    //maybe backdroppath instead of poster path
-    // let {
-    //   movie: {
-    //     title,
-    //     overview,
-    //     vote_average: ratings,
-    //     release_date: releaseDate,
-    //     poster_path: poster,
-    //     original_language: languageId
-    //   },
-    //   className,
-    //   languages
-    // } = this.props;
-    
-
-  // const languageUnabrreviated = languages.filter(
-  //   language => language.value === languageId
-  // )[0].title;
-
- 
-
   const onClick = () => {
-    if (isListItem)  {                          //maybe theres a better way to do this without conditional
+    if (isListItem)  {  
       openModal(movie);
     }
   } 
 
-  
   const observer = useRef();
   const itemRef = useCallback(item => {
-    // if (loading) return
     if (observer.current) 
       observer.current.disconnect();
 
@@ -66,30 +43,33 @@ const MovieItem = ({ isListItem, movie, className, languages, openModal }) => {
     if (item) observer.current.observe(item)
   }, [isImgLoaded])  
 
+  const fallbackImage = () => {
+    return <img src={require('../../assets/unfound.jpg')} />
+  }
+
   const renderItemImg = () => {
-    console.log('RENDERING ITEM IMAGE');
-    return isImgLoaded ?
-      <img src={`https://image.tmdb.org/t/p/w500/${poster}`} className={`${className}__img`}/>
-         :
-      null 
+  console.log('RENDERING ITEM IMAGE');
+  return isImgLoaded ?
+    <img src={`https://image.tmdb.org/t/p/w500/${poster}`} onError={fallbackImage}/>
+        :
+    null 
   }
 
   return (
     <StyledItem className={`${className}__item`} onClick={onClick} isListItem ref={itemRef}>
     
-      {
-        isListItem                        ?
+      {/* {
+        isListItem                        ? */}
                      
-    <>
-    {renderItemImg()} {/*maybe just set the backgonr as img instead of img el*/}
-        <div>
-          <h3>{title}</h3>
-          {/* <p>{releaseDate}</p> */}
-        </div>
-    </>
-                                         :
+    
+      {renderItemImg()} 
+      <div>
+        <h3>{title}</h3>
+      </div>
+    
+                                         {/* : */}
 
-      <>
+      {/* <>
       <div className={`${className}__info`}>
         <h2>{title}</h2>
         <p>{overview}</p>
@@ -98,7 +78,6 @@ const MovieItem = ({ isListItem, movie, className, languages, openModal }) => {
         <p>Language: {languages[languageId]}</p>
       </div>
       <div className={`${className}__img-container`}>
-        {/* <img src={`https://image.tmdb.org/t/p/w200/${poster}`} className={`${className}__img`}/> */}
         <Img 
             className='img'
             src={[
@@ -108,15 +87,11 @@ const MovieItem = ({ isListItem, movie, className, languages, openModal }) => {
             unloader={<img src={require('../../assets/unfound.jpg')} />}
         />
       </div>
-      </> 
-     
-
-
-      }
+      </>  */}
+      
     </StyledItem>
   );
 }
-
 
 const mapStateToProps = createStructuredSelector({
     languages: selectLanguageList

@@ -1,23 +1,20 @@
-import React, { Component, useEffect } from 'react';
-import { Field, Form, reduxForm } from 'redux-form';
+import React, { useEffect } from 'react';
+import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 
 import { fetchMoviesByCriteria } from '../../redux/movies/movies.actions';
 
-import Dropdown from '../Dropdown';
-import DropdownList from 'react-widgets/lib/DropdownList'
-import ReactDropdown from '../ReactDropdown/ReactDropdown.component';
 import { selectLanguageList } from '../../redux/languages/languages.selector';
 import { selectGenreList } from '../../redux/genres/genres.selector';
 import { selectForm } from '../../redux/form/form.selector';
 import { createStructuredSelector } from 'reselect';
 
-import { StyledContainer, StyledForm, StyledGroup } from './CustomForm.style';
+import { StyledForm, StyledGroup } from './CustomForm.style';
 
-const renderSelect = ({ options, purpose, input, ...formProps }) => {           //not sure formpropess is needed
+const renderSelect = ({ options, purpose, input, ...formProps }) => {        
     console.log('RENDERING SELECT OF CRITERIA', options)
     return (
-       <select { ...input }>{/* defaultValue={label === 'Languages' ? 'en' : 35}>*/}
+       <select { ...input }>
            {renderOptions(options, purpose)}
        </select>
     );
@@ -31,14 +28,11 @@ const renderOptions = (options, purpose) => {
     return processedOptions;
 }
 
-const onSelectChange = formProps => value => formProps.input.onChange(value);
-
 const renderInput = ({ input, label, placeholder, type, meta,  meta: { active, error, touched, visited } }) => {
     console.log('METAMEATMETAMETA', meta);
     const className = '' 
     return (
         <StyledGroup>
-            {/* <label>{label}</label> */}
             <input { ...input } autoComplete='off' placeholder={placeholder} type={type}/>
             {error && touched && !active && renderError(error)}
         </StyledGroup>
@@ -53,9 +47,6 @@ const renderError = (error) => {
     );
 }
 
-
-
-
 const CustomForm = ({ form, handleSubmit, mySubmit, className, genres, languages, reset, pristine, submitting, onFormToggleClick }) => {
     useEffect(() => {
         console.log('EFECTING FROM CUSTOM FORM', form)
@@ -64,16 +55,6 @@ const CustomForm = ({ form, handleSubmit, mySubmit, className, genres, languages
         }
     })
 
-    // const mySubmit = () => {
-    //     console.log('SUBMITTED')
-    //     onFormToggleClick();
-    //     reset();
-    // }
-
-    // const onSubmit = (formValues) => {
-    //     console.group('SUBMITTED');
-    // };
-
     const innerSubmit = formValues => {
         mySubmit(formValues);
         reset();
@@ -81,27 +62,15 @@ const CustomForm = ({ form, handleSubmit, mySubmit, className, genres, languages
 
     return (
             <StyledForm className={`${className}__form`} onSubmit={handleSubmit}>
-                {/* <Field name='genre' component={renderSelect} options={genres} purpose='genres' />  */}
-                {/* <Field name='language' component={renderSelect} options={languages} purpose='languages' />  */}
-
-
-                {/* <Field name='genres' component={ReactDropdown} optVals={genres} purpose={'genre'} onChange={onSelectChange}/>
-                <Field name='languages' component={ReactDropdown} optVals={languages} purpose={'language'} onChange={onSelectChange}/> */}
-
-                {/* <Field name='genres' component={DropdownList} data={Object.values(genres)} valueField='value' textField='color'/> */}
-
                 <Field name='with_genres' component={renderSelect} defaultValue={35} purpose='genre' options={genres} />
                 <Field name='language' component={renderSelect} purpose='language' options={languages} />
-
                 <Field name='year' type='number' component={renderInput} placeholder='Year'/> 
                 <Field name='vote_average' type='number' component={renderInput} placeholder='Rated at least'/>       
-                {/* <Field name='with_keywords' type='text' component={renderInput} placeholder='With keywords'/>  */}
                 <button type='submit' disabled={pristine || submitting}>Go</button>   
                 <button disabled={pristine || submitting} onClick={reset}>Clear</button>     
             </StyledForm>
     );
 }
-
 
 const mapStateToProps = createStructuredSelector({
     genres: selectGenreList,
@@ -132,11 +101,6 @@ const WrappedCustomForm = connect(mapStateToProps, { fetchMoviesByCriteria })(Cu
 
 export default reduxForm({
     form: 'CustomForm',
-    initialValues: {
-        // with_genres: 35,
-        // language: 'en'  
-    },
     destroyOnUnmount: false,
-    // values: {genre: '12'},
     validate
 })(WrappedCustomForm);

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';     ///////DELETE USEEFFECT
+import React from 'react'; 
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -26,14 +26,6 @@ const Modal = ({ movie, isActive, closeModal, languages, genres }) => {
     } = movie || {};
 
     const genresNames = genresIds.map(id => genres[id]);
-    // const preProcess = () => {
-
-    // }
-    // let ownGenres;
-
-    useEffect(() => {
-        // ownGenres = genreIds.map(id => genres[id]);
-    });
 
     const className = 'kaki';
     const onClick = () => {
@@ -53,7 +45,6 @@ const Modal = ({ movie, isActive, closeModal, languages, genres }) => {
                 <p className='genres'>{genresNames.join(', ')}</p>
             </h2>
             <div className='imgContainer'>
-                {/* <img src={`https://image.tmdb.org/t/p/w300/${poster}`} className='img'/> */}
                 <Img 
                     className='img'
                     src={[
@@ -69,15 +60,8 @@ const Modal = ({ movie, isActive, closeModal, languages, genres }) => {
             
         </StyledModal> :
         null
-        
-        
     );
 }
-
-// const mapStateToProps = createStructuredSelector({
-//     // isActive: selectIsActive,
-//     movie: selectMovie
-// });
 
 const mapStateToProps = createStructuredSelector({
     isActive: selectIsActive,
@@ -86,9 +70,8 @@ const mapStateToProps = createStructuredSelector({
     genres: selectGenreList
 });
 
-
 const mapDispatchToProps = dispatch => ({
-    closeModal: () => dispatch(closeModal())                       //BE THOGHTFUL OF THE OPTION TO CLOSE WHEN CLICKING ON SIDEBAR
+    closeModal: () => dispatch(closeModal())                 
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Modal);

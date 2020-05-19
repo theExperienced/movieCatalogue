@@ -1,10 +1,7 @@
-import React, { Component, useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 
-import { fetchMoviesByGenre, fetchBestMovies, fetchMoviesByCriteria } from '../../redux/movies/movies.actions';
-import { updateFormValues, resubmit } from '../../redux/form/form.actions';
-import { selectMoviesByGenre, selectBestMovies, selectMoviesByCriteria } from '../../redux/movies/movies.selector';
+import { selectMoviesByGenre, selectMoviesByCriteria } from '../../redux/movies/movies.selector';
 import { selectGenreList } from '../../redux/genres/genres.selector';
 import { selectFormValues, selectSubmitSucceeded } from '../../redux/form/form.selector';
 
@@ -77,7 +74,7 @@ const { data, fetchMovies, values, listToken, valuesChanged } = props;
       <span className="leftEnd" onClick={e => scroll(e, -1)}>&#8249;</span>
       <span className="rightEnd" onClick={e => scroll(e, 1)}>&#8250;</span>
       {data ? 
-          <StyledList offset={scrollOffset}>     {/*onWheel={onWheel} onScroll={onScroll}*/}
+          <StyledList offset={scrollOffset}>  
             {
               data.movies.map(movie => <MovieItem movie={movie} isListItem/>) 
             }
@@ -108,7 +105,7 @@ const mapDispatchToPropsCriteria = (dispatch, { values, fetcher }) => ({
 });
 
 const mapStateToProps = (state, { selector }) => ({
-  data: selector(state), //isBestMovies ? selectBestMovies(state) : selectMoviesByCriteria(state)
+  data: selector(state)
 });
 
 const mapDispatchToProps = (dispatch, { fetcher, formValues }) => ({

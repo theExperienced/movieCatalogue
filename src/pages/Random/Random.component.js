@@ -1,17 +1,15 @@
-import React, { Component, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { fetchRandomMovie } from '../../redux/movies/movies.actions';
 import { selectRandomMovie } from '../../redux/movies/movies.selector';
 
-import MovieItem from '../../components/MovieItem/MovieItem.component';
 import Img from 'react-image';
 import ClipLoader from "react-spinners/ClipLoader";
 
 import { StyledRandomPage, StyledTitle, StyledButton } from './Random.style';
 import { selectLanguageList } from '../../redux/languages/languages.selector';
-import { selectGenreList } from '../../redux/genres/genres.selector';
 
 const Random = props => {
   const { fetchRandomMovie, movie, languages } = props;
@@ -70,31 +68,12 @@ const Random = props => {
         </div>
       </div>}
     </StyledRandomPage>
-
-
-
-
-
-
-
-
-
-
-
-
-
-      // {/* <StyledTitle className='random__heading'>a random appetizer</StyledTitle> */}
-      
-      // {/* {movie && (
-      //   <MovieItem movie={movie} className='random' />
-      // )} */}
   );
 }
 
 const mapStateToProps = createStructuredSelector({
     movie: selectRandomMovie,
-    languages: selectLanguageList,
-    // genres: selectGenreList
+    languages: selectLanguageList
 });
 
 export default connect(mapStateToProps, { fetchRandomMovie })(Random);

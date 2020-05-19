@@ -9,45 +9,23 @@ import { selectAllMoviesByGenre } from '../../redux/movies/movies.selector';
 import { GenreMovieList } from '../MovieList/MovieList.component';
 
 import { StyledListComplex } from './MovieListComplex.style';
-import { StyledListContainer, StyledTitle } from '../MovieList/MovieList.style';
+import { StyledTitle } from '../MovieList/MovieList.style';
 
 const MovieListComplex = props => {
-  // const [ genreNum, setGenreNum ] = useState(5);
-
   const { moviesGalore, genres } = props;
-  const genresLength = Object.keys(genres).length;
-  console.log('PROPS FROM INSIDE MOVIE LIST COMPOLEX RENDER', genresLength)
-  
-
-
-
   const [ genresNum, setGenresNum ] = useState(Math.max(5, Object.keys(moviesGalore).length));
   const [ hasMore, setHasMore ] = useState(true);
-
-  const addThreeMoreGenres = () => {
-
-
-    setGenresNum(prevNum => prevNum + 3);
-    console.log('ADDING THREE MORE GENRES')
-  }
+  const genresLength = Object.keys(genres).length;
 
   useEffect(() => {
-    console.log('USEEFFECT COMPLEX LIST', hasMore)
-
     if (genres.length <= genresNum - 1) {
-      setGenresNum(genres.length);                  //MIGHT BELONG IN USEEFFECT
+      setGenresNum(genres.length);          
       setHasMore(false);
     }
-
-    return () => console.log('BYEEEEEEEEEEEEEEEEEE')
   }, [genresNum])
-
-  console.log('BEFORE RENDER COMPLEX LIST', hasMore)
-
 
   const observer = useRef();
   const lastListRef = useCallback(list => {
-    // if (loading) return
     if (observer.current) 
       observer.current.disconnect();
 
@@ -57,8 +35,7 @@ const MovieListComplex = props => {
       }
     });
     if (list) observer.current.observe(list)
-  }, [hasMore])                  //add loading to dependencies!!!
-
+  }, [hasMore])
 
   return (
     <StyledListComplex id={'listComplex'}>
@@ -67,7 +44,7 @@ const MovieListComplex = props => {
             return (
               <div ref={index + 1 === genresNum ? lastListRef : null}>
                 <StyledTitle>{title}</StyledTitle> 
-                <GenreMovieList isGenreList genreId={value} fetcher={fetchMoviesByGenre}/> {/*moviesGalore={moviesGalore[value].movies} listData={listData}*/}   
+                <GenreMovieList isGenreList genreId={value} fetcher={fetchMoviesByGenre}/>
               </div>
             )
           })
@@ -78,7 +55,7 @@ const MovieListComplex = props => {
 
 const mapStateToProps = createStructuredSelector({
   genres: selectGenreList,
-  moviesGalore: selectAllMoviesByGenre             ///////////////////////TRIALLLLL
+  moviesGalore: selectAllMoviesByGenre   
 });
 
 export default connect(mapStateToProps)(MovieListComplex);
