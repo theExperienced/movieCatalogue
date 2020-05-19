@@ -96,7 +96,7 @@ export const themes = {
             overlayColor: 'rgba(0, 0, 0, .6)',
             textColor: 'rgba(255, 255, 255, .9)'
         },
-        inverse: 'rgba(0, 0, 0, .05)',
+        inverse: 'rgba(255, 255, 255, .85)',
         modal: {
             textColor: '255, 255, 255',
             bgColor: '20, 20, 20'
